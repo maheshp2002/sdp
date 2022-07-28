@@ -1,0 +1,213 @@
+add to android manifest the following, after </activity> and before </application>  
+
+        <activity android:name=".home" />
+
+###############################################################
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="258dp"
+        android:layout_height="84dp"
+        android:layout_above="@+id/btn"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="78dp"
+        android:layout_marginBottom="278dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:ignore="UnknownId" />
+
+    <EditText
+        android:id="@+id/pass"
+        android:layout_width="258dp"
+        android:layout_height="84dp"
+        android:layout_above="@+id/btn"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="79dp"
+        android:layout_marginBottom="141dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:ignore="UnknownId" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="61dp"
+        android:layout_marginBottom="169dp"
+        android:text="OK"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancel"
+        app:layout_constraintTop_toBottomOf="@id/pass" />
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="169dp"
+        android:text="cancel"
+        android:textSize="10dp"
+        />
+</RelativeLayout>
+
+#############################################################
+
+MainActivity.java
+
+
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputConnectionWrapper;
+import android.widget.Button;
+import android.widget.EditText;
+public class MainActivity extends AppCompatActivity {
+    Button ok;
+    EditText name,pass;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ok=findViewById(R.id.btn);
+        //cancel=findViewById(R.id.cancel);
+        name=findViewById(R.id.name);
+        pass=findViewById(R.id.pass);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (name.getText().toString().equals("shalini") && (pass.getText().toString().equals("1234")))
+                {
+                    Intent intent =new Intent(MainActivity.this, home.class);
+                    Bundle b=new Bundle();
+                    b.putString("n",name.getText().toString());
+                    b.putString("p",pass.getText().toString());
+                    intent.putExtra("bsl",b);
+                    startActivity(intent);
+                }else{
+                    AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("LOGIN FAILED");
+                    builder.setTitle("Alert");
+                    builder.show();
+                    name.setText("");
+                    pass.setText("");
+                }
+            }
+        });
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                name.setText("");
+//                pass.setText("");
+//            }
+//        });
+    }
+}
+
+###############################################################
+home.java
+
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+public class home extends AppCompatActivity {
+    TextView txt1,txt2;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        Intent intent=getIntent();
+        Bundle b=intent.getBundleExtra("bsl");
+        String name=b.getString("n");
+        String pass=b.getString("p");
+        txt1=findViewById(R.id.textView2);
+        txt2=findViewById(R.id.textView3);
+        txt1.setText("Name :"+name);
+        txt2.setText("Password :"+pass);
+    }
+}
+
+#######################################################################
+activity_home.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="111dp"
+        android:text="Welcome"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="246dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="87dp"
+        android:layout_marginEnd="116dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="243dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="111dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
